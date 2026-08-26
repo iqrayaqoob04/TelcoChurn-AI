@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TelcoChurn AI - Predict Customer Churn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#ccff00",
+                        "tertiary-fixed": "#d3e4fe",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary": "#505f76",
+                        "on-surface": "#191c1e",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "tertiary-container": "#e3edff",
+                        "background": "#f7f9fb",
+                        "primary": "#506600",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#abd600",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#5c647a",
+                        "on-primary-fixed": "#161e00",
+                        "on-error": "#ffffff",
+                        "secondary": "#565e74",
+                        "inverse-primary": "#abd600",
+                        "outline-variant": "#c4c9ac",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#dae2fd",
+                        "on-tertiary-container": "#5c6c82",
+                        "surface-tint": "#506600",
+                        "outline": "#747a60",
+                        "inverse-surface": "#2d3133",
+                        "on-surface-variant": "#444933",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "on-primary-container": "#5b7300",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container": "#eceef0",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#c3f400",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .grid-bg {
+            background-size: 24px 24px;
+            background-image: linear-gradient(to right, rgba(226, 232, 240, 0.5) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden" style="background-image: linear-gradient(rgba(247, 249, 251, 0.9), rgba(247, 249, 251, 0.9)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuDstaPPKSKW2Abny0COgjveEPiKViUUtnHAlgyk3zceAnmWc0o1zYrJu6o15WCdTzjO1YnYOCEn8E8YiOXo9rlQOYwc2WxuuReGwrl4SGEOU3IVep1F6AMORqQw2fqROCjaW5KIwzxstDae8N5bCcffZ93qRG-TGp0YXN1RxepJ9zfZBti43e0Yn83Q_woc5G_knkM7lJX5a_Q9At3Y4A1VJXwDp8Tz5hAOkb9n5OmpZKctGA6QJQIl6Q'); background-attachment: fixed; background-size: cover; background-position: center;">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-background dark:bg-background border-b border-outline-variant dark:border-outline-variant">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-on-surface">TelcoChurn AI</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block font-label-md text-label-md px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-70 rounded-full">
+                    Try Demo
+                </button>
+<span class="material-symbols-outlined text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer active:opacity-70 transition-all">menu</span>
+</div>
+</div>
+</header>
+<main class="relative min-h-[calc(100vh-73px)] flex flex-col items-center justify-center px-margin-mobile pt-12 pb-24 grid-bg">
+<!-- Abstract glowing orb -->
+<div class="max-w-2xl mx-auto text-center relative z-10 flex flex-col items-center gap-6">
+<h1 class="font-headline-lg text-headline-lg text-on-surface leading-tight tracking-tight">
+                Predict Customer Churn <br class="hidden sm:block"/> Before It Happens
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mx-auto">
+                An AI-powered tool that analyzes customer behavior and flags high-risk accounts in real-time. Actionable insights for modern telecom analytics.
+            </p><div class="w-full max-w-lg mx-auto mt-4 rounded-xl overflow-hidden shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1)] border border-outline-variant/30"><img alt="Dashboard Illustration" class="w-full h-auto block" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6W5a-rsMqRa2dHPlQOPqacQ032lBZcu1GZM2_sYtScXLmB1xhWqTBbl5nRbEDbgwbe2o0nUJtPAE78w5FAiuBaB9kAlQ25GfyFB9cxqnINV4VN7bGq9uT5T0fmojwEXNQaGtvi3ZEHTc_Tzi6N7S8fNopOv3doGHmFHQ47BUHIzX9OELV-AS1T7zFZGlI_yJ5HulSVJPgFlE0ff-F7qdG06bgAjnaH2VS8rFzTLVz1Fk9TOvjZno7xA"/></div>
+<div class="mt-4 w-full sm:w-auto">
+<button class="w-full sm:w-auto font-label-md text-label-md px-8 py-4 bg-primary-container text-on-primary-container rounded-full hover:opacity-90 active:opacity-70 transition-opacity flex items-center justify-center gap-2">
+                    Get Started
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<!-- Dashboard preview illustration / data accents -->
+<div class="mt-12 w-full max-w-lg bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.05)] relative shadow-xl">
+<!-- Decorative points -->
+<div class="absolute -top-3 -right-3 w-6 h-6 bg-primary-container rounded-full border-2 border-surface-container-lowest flex items-center justify-center">
+<div class="w-2 h-2 bg-on-primary-container rounded-full"></div>
+</div>
+<div class="flex items-center justify-between border-b border-surface-variant pb-4 mb-4">
+<div class="font-headline-sm text-headline-sm text-on-surface">Risk Radar</div>
+<span class="font-label-md text-label-md px-2 py-1 bg-error-container text-on-error-container rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+                        High Alert
+                    </span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant font-data-mono text-[10px]">ID</div>
+<div class="font-body-md text-body-md text-on-surface">Account #4920</div>
+</div>
+<div class="font-data-mono text-data-mono text-error">92% Prob.</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant font-data-mono text-[10px]">ID</div>
+<div class="font-body-md text-body-md text-on-surface">Account #1104</div>
+</div>
+<div class="font-data-mono text-data-mono text-error">88% Prob.</div>
+</div>
+<div class="flex justify-between items-center opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant font-data-mono text-[10px]">ID</div>
+<div class="font-body-md text-body-md text-on-surface">Account #8832</div>
+</div>
+<div class="font-data-mono text-data-mono text-on-surface-variant">41% Prob.</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-surface-container-low dark:bg-surface-container-low border-t border-outline-variant dark:border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop gap-8 max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-on-surface">
+                TelcoChurn AI
+            </div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-body-md text-body-md font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Product</a>
+<a class="font-body-md text-body-md font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Solutions</a>
+<a class="font-body-md text-body-md font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Pricing</a>
+<a class="font-body-md text-body-md font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 cursor-pointer" href="#">Contact</a>
+</nav>
+<div class="font-body-md text-body-md font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant">
+                © 2024 TelcoChurn AI. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

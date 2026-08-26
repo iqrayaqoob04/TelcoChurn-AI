@@ -41,3 +41,12 @@ Build the frontend with `npm run build`, serve `frontend/dist`, and run the back
 ### Vercel
 
 Import this GitHub repository into Vercel with the repository root as the project root. The included `vercel.json` builds `frontend` and exposes the FastAPI app at `/api`. Leave `VITE_API_URL` unset for the same-origin default, or set it to `/api`. Vercel will install the root `requirements.txt` for the Python function.
+
+## Stitch export
+
+The downloaded Stitch project export is preserved under `stitch-export/stitch_telcochurn_ai_landing_page/`. The requested interactive-motion screen is available in:
+
+- `telcochurn_ai_with_interactive_motion_1/code.html` and `screen.png`
+- `telcochurn_ai_with_interactive_motion_2/code.html` and `screen.png`
+
+The export also includes the landing-page variants, generated visual assets, Three.js/shader experiments, and `signal_precision/DESIGN.md`.
