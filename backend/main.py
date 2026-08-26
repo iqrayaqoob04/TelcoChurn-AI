@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Literal
 import os
+import sys
 
 import joblib
 import numpy as np
@@ -12,17 +13,43 @@ from pydantic import BaseModel, Field
 # Handle both local and Vercel serverless environments
 ROOT = Path(__file__).resolve().parent.parent
 
-# Try to load model files with fallback paths
+# Try to load model files with multiple fallback paths
 def load_model_file(filename: str):
-    # Try relative to project root
-    for path in [ROOT / filename, Path(__file__).parent / filename]:
+    """Load model files from various possible locations."""
+    possible_paths = [
+        ROOT / filename,  # Local: project root
+        Path(__file__).parent / filename,  # In backend folder
+        Path.cwd() / filename,  # Current working directory
+        Path.cwd().parent / filename,  # Parent of cwd
+    ]
+    
+    # Also try sys.prefix (virtual env or Vercel runtime)
+    if hasattr(sys, 'prefix'):
+        possible_paths.extend([
+            Path(sys.prefix) / filename,
+            Path(sys.prefix).parent / filename,
+        ])
+    
+    for path in possible_paths:
         if path.exists():
+            print(f"Loading {filename} from {path}")
             return joblib.load(path)
-    raise FileNotFoundError(f"Model file not found: {filename}")
+    
+    # If file not found, provide helpful error
+    raise FileNotFoundError(
+        f"Model file not found: {filename}\n"
+        f"Searched in: {[str(p) for p in possible_paths]}"
+    )
 
-MODEL = load_model_file("telco_churn_model.pkl")
-SCALER = load_model_file("telco_scaler.pkl")
-FEATURE_COLUMNS = load_model_file("feature_columns.pkl")
+try:
+    MODEL = load_model_file("telco_churn_model.pkl")
+    SCALER = load_model_file("telco_scaler.pkl")
+    FEATURE_COLUMNS = load_model_file("feature_columns.pkl")
+except FileNotFoundError as e:
+    print(f"Error loading model files: {e}")
+    MODEL = None
+    SCALER = None
+    FEATURE_COLUMNS = None
 
 
 class CustomerInput(BaseModel):
