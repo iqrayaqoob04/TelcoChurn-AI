@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Literal
+import os
 
 import joblib
 import numpy as np
@@ -8,10 +9,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 
+# Handle both local and Vercel serverless environments
 ROOT = Path(__file__).resolve().parent.parent
-MODEL = joblib.load(ROOT / "telco_churn_model.pkl")
-SCALER = joblib.load(ROOT / "telco_scaler.pkl")
-FEATURE_COLUMNS = joblib.load(ROOT / "feature_columns.pkl")
+
+# Try to load model files with fallback paths
+def load_model_file(filename: str):
+    # Try relative to project root
+    for path in [ROOT / filename, Path(__file__).parent / filename]:
+        if path.exists():
+            return joblib.load(path)
+    raise FileNotFoundError(f"Model file not found: {filename}")
+
+MODEL = load_model_file("telco_churn_model.pkl")
+SCALER = load_model_file("telco_scaler.pkl")
+FEATURE_COLUMNS = load_model_file("feature_columns.pkl")
 
 
 class CustomerInput(BaseModel):
