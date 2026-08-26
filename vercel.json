@@ -3,7 +3,6 @@
   "buildCommand": "npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
   "framework": "vite",
-  "public": false,
   "functions": {
     "api/**/*.py": {
       "runtime": "python3.11"
