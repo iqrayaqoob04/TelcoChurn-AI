@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Activity, ArrowRight, BrainCircuit, CheckCircle2, Gauge, RotateCcw, ShieldAlert, Sparkles } from 'lucide-react';
 import './styles.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const API = import.meta.env.VITE_API_URL || '/api';
 const fields = [
   ['Customer profile', [['gender','Gender',['Female','Male']],['senior_citizen','Senior citizen',['0','1']],['partner','Partner',['No','Yes']],['dependents','Dependents',['No','Yes']]]],
   ['Account details', [['tenure','Tenure (months)','number'],['contract','Contract',['Month-to-month','One year','Two year']],['paperless_billing','Paperless billing',['No','Yes']],['payment_method','Payment method',['Electronic check','Mailed check','Bank transfer (automatic)','Credit card (automatic)']]]],

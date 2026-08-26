@@ -37,3 +37,7 @@ Send the fields shown in the frontend form. Numeric values are validated as non-
 ## Deployment
 
 Build the frontend with `npm run build`, serve `frontend/dist`, and run the backend behind a process manager or container. Set `VITE_API_URL` at frontend build time and restrict `allow_origins` in `backend/main.py` to the deployed frontend origin.
+
+### Vercel
+
+Import this GitHub repository into Vercel with the repository root as the project root. The included `vercel.json` builds `frontend` and exposes the FastAPI app at `/api`. Leave `VITE_API_URL` unset for the same-origin default, or set it to `/api`. Vercel will install the root `requirements.txt` for the Python function.
