@@ -6,3 +6,8 @@ node_modules
 frontend/node_modules
 stitch-export
 *.md
+backend/
+*.py
+requirements.txt
+*.pkl
+
